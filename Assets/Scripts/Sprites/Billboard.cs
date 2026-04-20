@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Billboard : MonoBehaviour
 {
@@ -9,8 +10,10 @@ public class Billboard : MonoBehaviour
     [SerializeField] float z_offset = 0;
     Camera m_camera;
     [SerializeField] SpriteRenderer m_renderer;
+    [SerializeField] float m_spriteScale;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    float camera_focal_length;
+
     void Start()
     {
         switch (Camera.current)
@@ -22,6 +25,8 @@ public class Billboard : MonoBehaviour
                 m_camera = Camera.current;
                 break;
         }
+
+        camera_focal_length = 1 / Mathf.Tan(m_camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
     }
 
     void UpdateBillboardState() {
@@ -32,8 +37,11 @@ public class Billboard : MonoBehaviour
             Vector3 look_target = m_camera.transform.position;
             m_renderer.transform.LookAt(look_target);
 
-            m_renderer.transform.position = (m_renderer.transform.forward * z_offset) + transform.position;
-            m_renderer.transform.localScale = (Vector3.Distance(look_target, transform.position) - Vector3.Distance(look_target, m_renderer.transform.position)) * Vector3.one;
+            Vector3 dir_to_cam = (m_camera.transform.position - transform.position).normalized;
+            float distance_to_cam = (m_camera.transform.position - transform.position).magnitude;
+
+            m_renderer.transform.position = (dir_to_cam * z_offset + transform.position);
+            m_renderer.transform.localScale = (Vector3.one) * m_spriteScale * camera_focal_length / (m_renderer.transform.position - m_camera.transform.position).magnitude;
         }
         else if (m_mode == FacingMode.CameraForward)
         {
@@ -41,8 +49,11 @@ public class Billboard : MonoBehaviour
             look_target.y = m_renderer.transform.position.y;
             m_renderer.transform.LookAt(look_target);
 
-            m_renderer.transform.position = (m_renderer.transform.forward * z_offset) + transform.position;
-            m_renderer.transform.localScale = (Vector3.Distance(m_camera.transform.position, transform.position) - Vector3.Distance(m_camera.transform.position, m_renderer.transform.position)) * Vector3.one;
+            Vector3 dir_to_cam = (look_target - transform.position).normalized;
+            float distance_to_cam = (look_target - transform.position).magnitude;
+
+            m_renderer.transform.position = ((m_camera.transform.position - transform.position).normalized * z_offset + transform.position);
+            m_renderer.transform.localScale = (Vector3.one) * m_spriteScale * camera_focal_length / (m_renderer.transform.position - look_target).magnitude;
         }
     }
 
