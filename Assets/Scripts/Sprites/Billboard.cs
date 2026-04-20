@@ -3,15 +3,13 @@ using UnityEngine.UIElements;
 
 public class Billboard : MonoBehaviour
 {
-
-    enum FacingMode { CameraPosition, CameraForward}
+    enum FacingMode { CameraPosition, CameraForward }
     [SerializeField] FacingMode m_mode = FacingMode.CameraPosition;
-    [SerializeField] bool flip = false;
-    [SerializeField] float z_offset = 0;
-    Camera m_camera;
+    [SerializeField] float z_offset = 0.55f;
     [SerializeField] SpriteRenderer m_renderer;
-    [SerializeField] float m_spriteScale;
+    [SerializeField] float m_spriteScale = 20;
 
+    Camera m_camera;
     float camera_focal_length;
 
     void Start()
