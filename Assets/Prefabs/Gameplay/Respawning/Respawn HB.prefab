@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7242552223142645858}
   - component: {fileID: 6670555290016147279}
   - component: {fileID: 615015058140514296}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Respawn HB
   m_TagString: Respawn Zone
   m_Icon: {fileID: 0}
@@ -47,10 +47,10 @@ BoxCollider:
     m_Bits: 8
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 448
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 5, y: 15, z: 15}
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17ae46f8192a8ed4f841ecf4032e4735, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawn_point: {fileID: 5978436597218345190}
+  m_respawn_point: {fileID: 5978436597218345190}
   override_checkpoint_id: 0
   checkpoint_id: -1
   priority_load: 0
@@ -80,7 +80,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5978436597218345190}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Respawn Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}

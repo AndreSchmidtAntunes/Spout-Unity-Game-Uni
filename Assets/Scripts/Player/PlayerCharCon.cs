@@ -23,7 +23,7 @@ public class PlayerCharCon : MonoBehaviour
     [HideInInspector] public UnityEvent<int> OnHealedEvent;
 
     public const int max_health = 100;
-    [SerializeField] private int m_health = max_health;
+    [SerializeField][Range(0,100)] private int m_health = max_health;
 
     const float invincibility_time = 0.75f;
     float invincibility_time_remaining = invincibility_time;
@@ -63,7 +63,7 @@ public class PlayerCharCon : MonoBehaviour
 
     private void OnDestroy() { GameManager.player = null; }
 
-    public System.Collections.Generic.List<Damager> touching_damagers;
+    [HideInInspector] public System.Collections.Generic.List<Damager> touching_damagers;
 
     public bool is_touching_damager { get { return touching_damagers.Count > 0; } }
 

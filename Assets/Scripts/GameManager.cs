@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public static class GameManager
 {
@@ -10,15 +11,38 @@ public static class GameManager
         Water,
         UI,
         Ground,
+        Damager,
+        Respawn_Zone,
     }
     
     // --- globals --- //
 
-    public static PlayerCharCon player;
+
+    private static PlayerCharCon _player;
+
     public static Transform respawn_point;
 
+    public static PlayerCharCon player
+    {
+        get
+        {
+            return _player;
+        }
+        set
+        {
+            if (respawn_point == null && value != null)
+            { // set a start respawn point if none is set
+                respawn_point = new GameObject("Start Respawn Point").transform;
+                respawn_point.position = value.transform.position;
+            }
+
+            _player = value;
+            return;
+        }
+    }
+
     private static System.Collections.Generic.
-        List<RespawnZone> respawn_zones;
+        List<RespawnZone> respawn_zones = new();
 
     public static void AddRespawnZone(RespawnZone item) {
         if (respawn_zones.Contains(item)) return;

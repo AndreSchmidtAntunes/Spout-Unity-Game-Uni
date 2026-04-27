@@ -21,14 +21,15 @@ public class RespawnZone : MonoBehaviour
             StartCoroutine(InitCoroutine());
     }
 
+    // allow loading throughout multiple frames
+    private IEnumerator InitCoroutine() { Init(); yield return null; }
+
     private void Init()
     {
         TryGetComponent(out m_collider);
 
         GameManager.AddRespawnZone(this);
     }
-    // allow loading throughout multiple frames
-    private IEnumerator InitCoroutine() { Init(); yield return null; }
 
     private void OnValidate() {
         if (override_checkpoint_id) {
