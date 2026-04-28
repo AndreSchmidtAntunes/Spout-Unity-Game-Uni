@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Pipe Metal
+  m_Shader: {fileID: -6465566751694194690, guid: 71a722135ee8eb04f9c7506f5dbda6d2, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 2
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AO: 0.71
+    - _Metalic: 1.16
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _Reflectance_Mag: 0.044
+    - _Smoothness: 0.18
+    m_Colors:
+    - _Emission: {r: 0.065681726, g: 0.09012356, b: 0.11320752, a: 1}
+    - _Large_Shine_Strip: {r: 0.2677999, g: 0.2969748, b: 0.3207547, a: 1}
+    - _Primary: {r: 0.1699893, g: 0.17232554, b: 0.18867922, a: 1}
+    - _Reflectance_Colour: {r: 0.22841758, g: 0.25852916, b: 0.2735849, a: 1}
+    - _Secondary: {r: 0.09433961, g: 0.06808472, b: 0.06808472, a: 1}
+    - _Small_Shine_Strip: {r: 0.36845854, g: 0.37629613, b: 0.3773585, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!114 &196029039023542738
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 10
