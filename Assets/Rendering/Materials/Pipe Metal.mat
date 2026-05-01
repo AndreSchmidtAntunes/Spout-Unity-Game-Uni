@@ -42,7 +42,7 @@ Material:
     - _Metalic: 1.16
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Reflectance_Mag: 0.044
+    - _Reflectance_Mag: 0.096
     - _Smoothness: 0.18
     m_Colors:
     - _Emission: {r: 0.065681726, g: 0.09012356, b: 0.11320752, a: 1}

@@ -1,5 +1,6 @@
 using UnityEngine;
-using UnityEngine.Events;
+using System.Collections;
+using System.Collections.Generic;
 
 public static class GameManager
 {
@@ -76,6 +77,22 @@ public static class GameManager
             highest_reached_respawn_zone = index_of_item;
             respawn_point = item.respawn_point;
         }
+    }
+
+    public static void CameraShake(float intencity, float duration) { 
+
+    }
+
+    private static IEnumerator CameraShakeCour () { 
+    
+    }
+
+    public static void StartRiverEvent() { 
+        
+    }
+
+    private static IEnumerator RiverEvent(float warning_duration, float duration) { 
+
     }
 
 }
