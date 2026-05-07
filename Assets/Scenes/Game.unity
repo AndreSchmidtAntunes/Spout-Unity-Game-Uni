@@ -119,6 +119,172 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &14244378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 14244380}
+  - component: {fileID: 14244379}
+  m_Layer: 0
+  m_Name: EffectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &14244379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14244378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9acb993a3c70e8f4b8a689dd2b4e900a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  warning_shake_intencity_curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.9852217
+      outSlope: 0.9852217
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.12288136
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  flowing_shake_intencity_curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.57914054
+      value: 0.9452328
+      inSlope: -0.22294174
+      outSlope: -0.22294174
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.79452324
+      value: 0.7530206
+      inSlope: -1.6873546
+      outSlope: -1.6873546
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.29026857
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  river_shader_active_curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.35
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.8545662
+      value: 0.8139967
+      inSlope: -1.1683656
+      outSlope: -1.1683656
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.92607856
+      value: 0.5804711
+      inSlope: -5.584285
+      outSlope: -5.584285
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.079287305
+      outWeight: 0.26724002
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  river_flowing_material: {fileID: 2100000, guid: 55d3d1aeb4b3529479a19a6a3ebfdd58, type: 2}
+  warning_duration: 4
+  flow_duration: 3
+  river_shake_intensity: 0.85
+  CameraShakeNoise: {fileID: 930291680}
+--- !u!4 &14244380
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14244378}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.88913, y: 5.26386, z: -1.80276}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &21535499
 GameObject:
   m_ObjectHideFlags: 0
@@ -964,6 +1130,7 @@ GameObject:
   - component: {fileID: 930291679}
   - component: {fileID: 930291677}
   - component: {fileID: 930291678}
+  - component: {fileID: 930291680}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -1076,6 +1243,23 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   FollowOffset: {x: 0, y: 0, z: -10}
+--- !u!114 &930291680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930291672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NoiseProfile: {fileID: 11400000, guid: 7dbb9cd985900d24fa4e9794d2235f93, type: 2}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  AmplitudeGain: -0.0000001192093
+  FrequencyGain: -0.0000001192093
+  m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1001 &1141970208
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1500,7 +1684,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_mode: 1
-  m_billboardVisual: {fileID: 1379632610}
+  m_billboardVisual: {fileID: 0}
   z_offset: 0.55
   m_spriteScale: 38
   m_flip: 0
@@ -1798,3 +1982,4 @@ SceneRoots:
   - {fileID: 591387447}
   - {fileID: 1141970208}
   - {fileID: 21535502}
+  - {fileID: 14244380}

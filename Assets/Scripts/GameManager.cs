@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public static class GameManager
 {
@@ -79,20 +77,8 @@ public static class GameManager
         }
     }
 
-    public static void CameraShake(float intencity, float duration) { 
-
-    }
-
-    private static IEnumerator CameraShakeCour () { 
-    
-    }
-
-    public static void StartRiverEvent() { 
-        
-    }
-
-    private static IEnumerator RiverEvent(float warning_duration, float duration) { 
-
+    public static void StartRiverEvent() {
+        EffectManager.instance.StartRiverEventVisuals();
     }
 
 }
