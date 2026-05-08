@@ -42,7 +42,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Active: -0.000000059604645
+    - _Active: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -56,7 +56,7 @@ Material:
     - _DstBlend: 10
     - _Float: 1.34
     - _Fog_Distance: 0.1
-    - _Mesh_Deformation_Strength: 0.09
+    - _Mesh_Deformation_Strength: 0.25
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1

@@ -172,36 +172,18 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  flowing_shake_intencity_curve:
+  ending_shake_intencity_curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 1
+      time: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
-    - serializedVersion: 3
-      time: 0.57914054
-      value: 0.9452328
-      inSlope: -0.22294174
-      outSlope: -0.22294174
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 1
-    - serializedVersion: 3
-      time: 0.79452324
-      value: 0.7530206
-      inSlope: -1.6873546
-      outSlope: -1.6873546
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.29026857
     - serializedVersion: 3
       time: 1
       value: 0
@@ -214,11 +196,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  river_shader_active_curve:
+  river_start_shader_active_curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.35
+      time: 0
       value: 0
       inSlope: 0
       outSlope: 0
@@ -227,7 +209,7 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.5
+      time: 1
       value: 1
       inSlope: 0
       outSlope: 0
@@ -235,24 +217,21 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  river_end_shader_active_curve:
+    serializedVersion: 2
+    m_Curve:
     - serializedVersion: 3
-      time: 0.8545662
-      value: 0.8139967
-      inSlope: -1.1683656
-      outSlope: -1.1683656
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 1
-    - serializedVersion: 3
-      time: 0.92607856
-      value: 0.5804711
-      inSlope: -5.584285
-      outSlope: -5.584285
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.079287305
-      outWeight: 0.26724002
+      inWeight: 0
+      outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 0
@@ -266,8 +245,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   river_flowing_material: {fileID: 2100000, guid: 55d3d1aeb4b3529479a19a6a3ebfdd58, type: 2}
-  warning_duration: 4
-  flow_duration: 3
   river_shake_intensity: 0.85
   CameraShakeNoise: {fileID: 930291680}
 --- !u!4 &14244380
@@ -421,13 +398,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 181385551}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0.7071068, z: -0, w: 0}
-  m_LocalPosition: {x: 377.7, y: -1.5, z: -34.296}
-  m_LocalScale: {x: 14, y: 1, z: 14}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 0.0025, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1416616988}
-  m_Father: {fileID: 2091602237}
+  m_Father: {fileID: 2129577591}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &288817922
 GameObject:
@@ -444,7 +421,7 @@ GameObject:
   - component: {fileID: 288817927}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1257,8 +1234,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NoiseProfile: {fileID: 11400000, guid: 7dbb9cd985900d24fa4e9794d2235f93, type: 2}
   PivotOffset: {x: 0, y: 0, z: 0}
-  AmplitudeGain: -0.0000001192093
-  FrequencyGain: -0.0000001192093
+  AmplitudeGain: 0
+  FrequencyGain: 0
   m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1001 &1141970208
 PrefabInstance:
@@ -1558,7 +1535,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -338.2, z: 0}
-  m_LocalScale: {x: 1.35, y: 4.54, z: 1.35}
+  m_LocalScale: {x: 1.2, y: 3.35, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 181385552}
@@ -1586,7 +1563,6 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31f9711c35eef994da9723b2733db081, type: 2}
   - {fileID: 2100000, guid: 9feb4ed74ebc1d44abdec768c959e470, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -1684,7 +1660,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_mode: 1
-  m_billboardVisual: {fileID: 0}
+  m_billboardVisual: {fileID: 1379632610}
   z_offset: 0.55
   m_spriteScale: 38
   m_flip: 0
@@ -1718,7 +1694,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2129577591}
-  - {fileID: 181385552}
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1322020796}
@@ -1736,9 +1711,10 @@ GameObject:
   - component: {fileID: 2129577590}
   - component: {fileID: 2129577589}
   - component: {fileID: 2129577588}
+  - component: {fileID: 2129577592}
   m_Layer: 6
   m_Name: Pipe
-  m_TagString: Untagged
+  m_TagString: Main Pipe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1832,9 +1808,27 @@ Transform:
   m_LocalPosition: {x: 377.7, y: -1.5, z: -34.296}
   m_LocalScale: {x: 14, y: 400, z: 14}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 181385552}
   m_Father: {fileID: 2091602237}
   m_LocalEulerAnglesHint: {x: 180, y: 0, z: -90}
+--- !u!114 &2129577592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129577587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b86976095946a5d478f91d4e7f9473ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_flow_duration: 4
+  m_warning_duration: 2
+  m_end_duration: 2
+  m_is_river_active: 0
+  m_river_is_damaging: 0
 --- !u!1001 &5705577305371797472
 PrefabInstance:
   m_ObjectHideFlags: 0

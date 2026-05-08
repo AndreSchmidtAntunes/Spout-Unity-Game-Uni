@@ -1,29 +1,31 @@
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.Splines.Interpolators;
 
 public class EffectManager : MonoBehaviour
 {
-    public static EffectManager instance = null;
+    [SerializeField] private static EffectManager m_instance = null;
+    public static EffectManager instance {
+        private set { m_instance = value; }
+        get { return m_instance; }
+    }
 
     [Header("River Event")]
 
     [SerializeField] AnimationCurve warning_shake_intencity_curve = new(new Keyframe[] { new Keyframe(0, 0), new Keyframe(1, 1) });
-    [SerializeField] AnimationCurve flowing_shake_intencity_curve = new(new Keyframe[] { new Keyframe(1, 0), new Keyframe(1, 0) });
+    [SerializeField] AnimationCurve ending_shake_intencity_curve = new(new Keyframe[] { new Keyframe(1, 0), new Keyframe(1, 0) });
 
-    [SerializeField] AnimationCurve river_shader_active_curve = new(new Keyframe[] { new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0) });
+    [SerializeField] AnimationCurve river_start_shader_active_curve = new(new Keyframe[] { new Keyframe(0, 0), new Keyframe(1, 1)});
+    [SerializeField] AnimationCurve river_end_shader_active_curve   = new(new Keyframe[] { new Keyframe(1, 0), new Keyframe(0, 1)});
 
     [SerializeField] Material river_flowing_material;
 
-    [SerializeField] float warning_duration = 1.0f;
-    [SerializeField] float flow_duration = 1.0f;
     [SerializeField] float river_shake_intensity = 1.0f;
     [SerializeField] CinemachineBasicMultiChannelPerlin CameraShakeNoise;
 
     private void Awake() {
-        if (instance == null) {
-            instance = this;
+        if (m_instance == null) {
+            m_instance = this;
             GameObject.DontDestroyOnLoad(gameObject);
         }
     }
@@ -65,43 +67,52 @@ public class EffectManager : MonoBehaviour
         }
     }
 
-    static bool river_event_can_activate = true;
+    bool can_animate_river_visuals = true; // animation coroutines use this to wait for other animation coroutines to complete
 
-    private IEnumerator RiverEventVisualsCour(float warning_duration, float flow_duration, float intensity_mult, Material river_flowing_mat) {
-
-        StartCoroutine(RiverShaderActiveAnimatorCour(river_flowing_mat, river_shader_active_curve, warning_duration + flow_duration));
-        StartCoroutine(CameraShakeCour(current_camera, warning_shake_intencity_curve, intensity_mult, warning_duration));
-
-        yield return new WaitForSeconds(warning_duration); // wait for when the river should appear
-
-        StartCoroutine(CameraShakeCour(current_camera, flowing_shake_intencity_curve, intensity_mult, flow_duration));
-
-
-        yield return new WaitForSeconds(flow_duration); // wait for when the river should appear
-
-        yield return new WaitForSeconds(0.5f); // amount of downtime for the visuals 
-        river_event_can_activate = true;
+    private IEnumerator RiverEventVisualsAnimationCour(Camera camera, Material river_flowing_mat, AnimationCurve river_shader_active_curve, AnimationCurve camera_shake_curve, float shake_intensity, float duration) {
+        can_animate_river_visuals = false;
+            StartCoroutine(RiverShaderActiveAnimatorCour(river_flowing_mat, river_shader_active_curve, duration));
+            yield return StartCoroutine(CameraShakeCour(camera, camera_shake_curve, shake_intensity, duration)); // we are yielding here to wait for the specific duration before allowing the river state to animate
+        can_animate_river_visuals = true;
     }
 
-    public void StartRiverEventVisuals() {
-        if (river_event_can_activate) {
-            river_event_can_activate = false;
-            StartCoroutine(RiverEventVisualsCour(warning_duration, flow_duration, river_shake_intensity, river_flowing_material));
-        }
-    }
+    private bool river_active = false;
 
-    private IEnumerator RiverEventTimerCour() {
-        while (true) {
-            StartRiverEventVisuals();
-            yield return new WaitForSeconds(10);
-        }
-    }
-    private void Start()  {
-        current_camera = Camera.main;
-        StartCoroutine(RiverEventTimerCour());
-    }
-    private void FixedUpdate()
+    public void StartRiverEvent(float starting_duration)
     {
-        //Debug.Log(river_event_elapsed);
+        if (!river_active) {
+            StartCoroutine(StartRiverEventCour(starting_duration));
+            river_active = true;
+        }
+    }
+    private bool can_run_river_start_cour = true; // used to force only one active coroutine for running the river starting animation.
+    private IEnumerator StartRiverEventCour(float starting_duration)
+    {
+        if (can_run_river_start_cour) {
+            can_run_river_start_cour = false;
+
+            can_run_river_end_cour = true;
+
+            yield return new WaitWhile(() => can_animate_river_visuals);
+            yield return StartCoroutine(RiverEventVisualsAnimationCour(current_camera, river_flowing_material, river_start_shader_active_curve, warning_shake_intencity_curve, river_shake_intensity, starting_duration));
+            can_run_river_start_cour = true;
+        }
+    }
+
+    public void EndRiverEvent(float ending_duration) {
+        if (river_active) { // allow the ending of the animation to be queued by ignoring if an animation is currently playing
+            StartCoroutine(EndRiverEventCour(ending_duration));
+            river_active = false;
+        }
+    }
+    private bool can_run_river_end_cour = false; // used to force only one active coroutine for running the river ending animation.
+    private IEnumerator EndRiverEventCour(float ending_duration)
+    {
+        if (can_run_river_end_cour) {
+            can_run_river_end_cour = false;
+            yield return new WaitWhile(() => can_animate_river_visuals);
+            yield return StartCoroutine(RiverEventVisualsAnimationCour(current_camera, river_flowing_material, river_end_shader_active_curve, ending_shake_intencity_curve, river_shake_intensity, ending_duration));
+            can_run_river_end_cour = true;
+        }
     }
 }

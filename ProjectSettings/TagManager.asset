@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Respawn Zone
   - Damager
+  - Main Pipe
   layers:
   - Default
   - TransparentFX

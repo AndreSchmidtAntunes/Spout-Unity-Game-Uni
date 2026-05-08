@@ -76,9 +76,4 @@ public static class GameManager
             respawn_point = item.respawn_point;
         }
     }
-
-    public static void StartRiverEvent() {
-        EffectManager.instance.StartRiverEventVisuals();
-    }
-
 }
