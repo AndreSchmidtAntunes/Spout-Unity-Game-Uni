@@ -42,15 +42,19 @@ Material:
     - _Metalic: 1.16
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Reflectance_Mag: 0.096
+    - _Reflectance_Mag: 0.14
+    - _Shadow_Mag: 0.31
     - _Smoothness: 0.18
     m_Colors:
     - _Emission: {r: 0.065681726, g: 0.09012356, b: 0.11320752, a: 1}
-    - _Large_Shine_Strip: {r: 0.2677999, g: 0.2969748, b: 0.3207547, a: 1}
+    - _Large_Shine_Strip: {r: 0.19286224, g: 0.20030938, b: 0.20754719, a: 1}
     - _Primary: {r: 0.1699893, g: 0.17232554, b: 0.18867922, a: 1}
-    - _Reflectance_Colour: {r: 0.22841758, g: 0.25852916, b: 0.2735849, a: 1}
+    - _Reflectance_Colour: {r: 0.20185119, g: 0.22335333, b: 0.2264151, a: 1}
+    - _Rus_Colour: {r: 0.20754719, g: 0.13412248, b: 0.15761976, a: 1}
+    - _Rust_Colour: {r: 0.18867922, g: 0.13082945, b: 0.16876012, a: 1}
     - _Secondary: {r: 0.09433961, g: 0.06808472, b: 0.06808472, a: 1}
-    - _Small_Shine_Strip: {r: 0.36845854, g: 0.37629613, b: 0.3773585, a: 1}
+    - _Shadow: {r: 0.12726091, g: 0.11320755, b: 0.1509434, a: 1}
+    - _Small_Shine_Strip: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &196029039023542738

@@ -26,7 +26,7 @@ public class EffectManager : MonoBehaviour
     private void Awake() {
         if (m_instance == null) {
             m_instance = this;
-            GameObject.DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
         }
     }
 
@@ -55,6 +55,7 @@ public class EffectManager : MonoBehaviour
     private IEnumerator RiverShaderActiveAnimatorCour(Material river_flowing_mat, AnimationCurve curve, float duration) {
 
         float elapsed_time = 0;
+
         while (elapsed_time < duration) {
 
             river_flowing_mat.SetFloat("_Active", curve.Evaluate(elapsed_time / duration));
@@ -70,6 +71,8 @@ public class EffectManager : MonoBehaviour
     bool can_animate_river_visuals = true; // animation coroutines use this to wait for other animation coroutines to complete
 
     private IEnumerator RiverEventVisualsAnimationCour(Camera camera, Material river_flowing_mat, AnimationCurve river_shader_active_curve, AnimationCurve camera_shake_curve, float shake_intensity, float duration) {
+        yield return new WaitUntil(() => can_animate_river_visuals);
+
         can_animate_river_visuals = false;
             StartCoroutine(RiverShaderActiveAnimatorCour(river_flowing_mat, river_shader_active_curve, duration));
             yield return StartCoroutine(CameraShakeCour(camera, camera_shake_curve, shake_intensity, duration)); // we are yielding here to wait for the specific duration before allowing the river state to animate
@@ -78,41 +81,39 @@ public class EffectManager : MonoBehaviour
 
     private bool river_active = false;
 
-    public void StartRiverEvent(float starting_duration)
-    {
+    public void StartRiverEvent(float starting_duration) {
+
         if (!river_active) {
             StartCoroutine(StartRiverEventCour(starting_duration));
             river_active = true;
         }
     }
     private bool can_run_river_start_cour = true; // used to force only one active coroutine for running the river starting animation.
-    private IEnumerator StartRiverEventCour(float starting_duration)
-    {
+    private IEnumerator StartRiverEventCour(float starting_duration) {
+
         if (can_run_river_start_cour) {
+
             can_run_river_start_cour = false;
-
-            can_run_river_end_cour = true;
-
-            yield return new WaitWhile(() => can_animate_river_visuals);
             yield return StartCoroutine(RiverEventVisualsAnimationCour(current_camera, river_flowing_material, river_start_shader_active_curve, warning_shake_intencity_curve, river_shake_intensity, starting_duration));
-            can_run_river_start_cour = true;
+            can_run_river_end_cour = true;
         }
     }
 
     public void EndRiverEvent(float ending_duration) {
+
         if (river_active) { // allow the ending of the animation to be queued by ignoring if an animation is currently playing
             StartCoroutine(EndRiverEventCour(ending_duration));
             river_active = false;
         }
     }
+
     private bool can_run_river_end_cour = false; // used to force only one active coroutine for running the river ending animation.
-    private IEnumerator EndRiverEventCour(float ending_duration)
-    {
+    private IEnumerator EndRiverEventCour(float ending_duration) {
+
         if (can_run_river_end_cour) {
             can_run_river_end_cour = false;
-            yield return new WaitWhile(() => can_animate_river_visuals);
             yield return StartCoroutine(RiverEventVisualsAnimationCour(current_camera, river_flowing_material, river_end_shader_active_curve, ending_shake_intencity_curve, river_shake_intensity, ending_duration));
-            can_run_river_end_cour = true;
+            can_run_river_start_cour = true;
         }
     }
 }
