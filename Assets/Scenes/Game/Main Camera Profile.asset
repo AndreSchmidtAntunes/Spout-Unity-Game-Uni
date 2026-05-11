@@ -1,24 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9100523109860248380
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b709909182ba0943abef2c49ed59205, type: 3}
-  m_Name: PaniniProjection
-  m_EditorClassIdentifier: 
-  active: 1
-  distance:
-    m_OverrideState: 1
-    m_Value: 0.233
-  cropToFit:
-    m_OverrideState: 0
-    m_Value: 1
 --- !u!114 &-8959917607061764995
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -716,7 +697,6 @@ MonoBehaviour:
   - {fileID: 519688405755946865}
   - {fileID: 2916504139705217145}
   - {fileID: -1239198663179609089}
-  - {fileID: -9100523109860248380}
   - {fileID: -7889650166957691828}
   - {fileID: 2651030695724616167}
   - {fileID: -8208579750365417789}
@@ -907,13 +887,13 @@ MonoBehaviour:
     m_Value: {r: 0.31003386, g: 0.2971698, b: 0.3962264, a: 1}
   center:
     m_OverrideState: 1
-    m_Value: {x: 0.46, y: 0.38}
+    m_Value: {x: 0.48, y: 0.46}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.347
+    m_Value: 0.495
   smoothness:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.33
   roundness:
     m_OverrideState: 1
     m_Value: 1
@@ -1043,10 +1023,10 @@ MonoBehaviour:
     m_Value: 1
   compositionMode:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   clusterCount:
     m_OverrideState: 1
-    m_Value: 23
+    m_Value: 25
   sortingQuality:
     m_OverrideState: 1
     m_Value: 2

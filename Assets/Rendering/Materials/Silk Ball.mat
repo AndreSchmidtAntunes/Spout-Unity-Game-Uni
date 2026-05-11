@@ -99,7 +99,7 @@ Material:
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
     - _ShadowMatteFilter: 2.006836
-    - _Shine: 0.604
+    - _Shine: 0.336
     - _SrcBlend: 1
     - _StencilRef: 0
     - _StencilRefDepth: 1
