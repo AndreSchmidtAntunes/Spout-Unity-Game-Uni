@@ -10,15 +10,10 @@ public class PipeRiverEventController : MonoBehaviour
     [SerializeField] bool m_is_river_active = false;
     [SerializeField] private bool m_river_is_damaging = false;
 
-    //private bool __is_river_active = false;
-
     public bool is_river_active {
         get { return (m_is_river_active); }
         private set
         {
-            //if (__is_river_active == value) return;
-
-            //__is_river_active = value;
             m_is_river_active = value;
 
             if (value)
@@ -29,7 +24,6 @@ public class PipeRiverEventController : MonoBehaviour
             {
                 m_river_is_damaging = false;
                 EffectManager.instance?.EndRiverEvent(m_end_duration);
-                Debug.Log(EffectManager.instance);
             }
         }
     }
@@ -41,7 +35,6 @@ public class PipeRiverEventController : MonoBehaviour
     private IEnumerator FireRiver(float warning_duration, float flowing_duration, float ending_duration) {
 
         EffectManager.instance?.StartRiverEvent(warning_duration);
-        Debug.Log(EffectManager.instance);
         StartCoroutine(ForceDisableRiverTimer(warning_duration + flowing_duration, ending_duration));
 
         yield return new WaitForSeconds(warning_duration);
@@ -75,6 +68,17 @@ public class PipeRiverEventController : MonoBehaviour
         {
             // send damage request to player
             GameManager.player.health = 0;
+        }
+    }
+
+    private void Start() {
+        StartCoroutine(EventLoop());
+    }
+
+    IEnumerator EventLoop() {
+        while (true) {
+            yield return new WaitForSeconds(12);
+            is_river_active = true;
         }
     }
 }

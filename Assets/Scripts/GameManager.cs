@@ -13,13 +13,13 @@ public static class GameManager
         Damager,
         Respawn_Zone,
     }
-    
+
     // --- globals --- //
 
 
     private static PlayerCharCon _player;
 
-    public static Transform respawn_point;
+    public static Vector3 respawn_point;
 
     public static PlayerCharCon player
     {
@@ -29,10 +29,8 @@ public static class GameManager
         }
         set
         {
-            if (respawn_point == null && value != null)
-            { // set a start respawn point if none is set
-                respawn_point = new GameObject("Start Respawn Point").transform;
-                respawn_point.position = value.transform.position;
+            if (value != null) {
+                respawn_point = value.transform.position;
             }
 
             _player = value;
@@ -46,7 +44,7 @@ public static class GameManager
     public static void AddRespawnZone(RespawnZone item) {
         if (respawn_zones.Contains(item)) return;
 
-        for (int i = 0; i < respawn_zones.Count; i++) { 
+        for (int i = 0; i < respawn_zones.Count; i++) {
             if (respawn_zones[i].transform.position.x < item.transform.position.x) {
                 respawn_zones.Insert(i, item);
                 return;

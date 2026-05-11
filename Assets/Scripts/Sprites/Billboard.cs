@@ -1,51 +1,69 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
 
 public class Billboard : MonoBehaviour
 {
     enum FacingMode { CameraPosition, CameraForward }
     [SerializeField] FacingMode m_mode = FacingMode.CameraPosition;
     [SerializeField] Transform m_billboardVisual;
-    [SerializeField] float z_offset = 0.55f;
-    [SerializeField] float m_spriteScale = 20;
-    [SerializeField] bool m_flip = false;
+    [SerializeField] public float z_offset = 0.55f;
+    [SerializeField] public float m_spriteScale = 20;
+    [SerializeField] public bool m_flip = false;
 
     Camera m_camera;
     float camera_focal_length;
 
-    void Start()
+    public static Camera GetCurrentCamera()
     {
-        m_camera = Camera.current != null ? Camera.current : Camera.main;
+    #if UNITY_EDITOR
+        // Use Scene view camera while editing
+        if (!Application.isPlaying)
+        {
+            SceneView sceneView = SceneView.lastActiveSceneView;
 
+            if (sceneView != null && sceneView.camera != null)
+            {
+                return sceneView.camera;
+            }
+        }
+    #endif
+        return Camera.main;
+    }
+
+    void OnValidate() {
+        m_camera = GetCurrentCamera();
         camera_focal_length = 1 / Mathf.Tan(m_camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
     }
+
     void UpdateBillboardState()
     {
         if (!m_camera || !m_billboardVisual) return;
 
         if (m_mode == FacingMode.CameraPosition)
         {
-            Vector3 look_target = m_camera.transform.position;
+            Vector3 camera_pos = m_camera.transform.position;
+            Vector3 look_target = camera_pos;
             m_billboardVisual.LookAt(look_target);
-
-            Vector3 dir_to_cam = (m_camera.transform.position - transform.position).normalized;
-            float distance_to_cam = (m_camera.transform.position - transform.position).magnitude;
-
-            m_billboardVisual.position = (dir_to_cam * z_offset + transform.position);
-            m_billboardVisual.localScale = (Vector3.one) * m_spriteScale * camera_focal_length / (m_billboardVisual.position - m_camera.transform.position).magnitude;
         }
         else if (m_mode == FacingMode.CameraForward)
         {
-            Vector3 look_target = m_camera.transform.position;
+            Vector3 camera_pos = m_camera.transform.position;
+            Vector3 look_target = camera_pos;
             look_target.y = m_billboardVisual.position.y;
             m_billboardVisual.LookAt(look_target);
-
-            Vector3 dir_to_cam = (look_target - transform.position).normalized;
-            float distance_to_cam = (look_target - transform.position).magnitude;
-
-            m_billboardVisual.position = ((m_camera.transform.position - transform.position).normalized * z_offset + transform.position);
-            m_billboardVisual.localScale = (Vector3.one) * m_spriteScale * camera_focal_length / (m_billboardVisual.position - look_target).magnitude;
         }
+
+        Vector3 dir_to_cam = (m_camera.transform.position - transform.position).normalized;
+
+        m_billboardVisual.position = dir_to_cam * z_offset + transform.position;
+
+        float distance_to_camera = (transform.position - m_camera.transform.position).magnitude;
+        float visual_distance_to_camera = (m_billboardVisual.position - m_camera.transform.position).magnitude;
+
+        m_billboardVisual.localScale = Vector3.one * m_spriteScale * visual_distance_to_camera / distance_to_camera;
 
         if (m_flip)
             m_billboardVisual.Rotate(0, 180, 0);
@@ -56,4 +74,9 @@ public class Billboard : MonoBehaviour
     {
         UpdateBillboardState();
     }
+
+    void OnDrawGizmos() {
+        UpdateBillboardState();
+    }
 }
+

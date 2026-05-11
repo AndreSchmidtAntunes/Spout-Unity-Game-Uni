@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17ae46f8192a8ed4f841ecf4032e4735, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_respawn_point: {fileID: 5978436597218345190}
+  m_respawn_point_transform: {fileID: 5978436597218345190}
   override_checkpoint_id: 0
   checkpoint_id: -1
   priority_load: 0

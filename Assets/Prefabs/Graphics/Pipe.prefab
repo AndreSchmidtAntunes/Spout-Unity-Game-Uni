@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 6776837972235497705}
   - component: {fileID: 3281059780948941276}
   - component: {fileID: 1561310208798156792}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Pipe
-  m_TagString: Main Pipe
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2249052408246874528}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 17.22, z: -2.07}
+  m_LocalPosition: {x: -0.5, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b86976095946a5d478f91d4e7f9473ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_flow_duration: 4
-  m_warning_duration: 2
-  m_end_duration: 2
+  m_flow_duration: 3
+  m_warning_duration: 4
+  m_end_duration: 1.75
   m_is_river_active: 0
   m_river_is_damaging: 0
 --- !u!64 &1561310208798156792
@@ -124,6 +124,10 @@ PrefabInstance:
     - target: {fileID: 1708227878032562231, guid: c30901dbfadb6de4a8ddc4cf70cdf7b9, type: 3}
       propertyPath: m_Name
       value: Model
+      objectReference: {fileID: 0}
+    - target: {fileID: 1708227878032562231, guid: c30901dbfadb6de4a8ddc4cf70cdf7b9, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5868936818132554121, guid: c30901dbfadb6de4a8ddc4cf70cdf7b9, type: 3}
       propertyPath: m_StaticEditorFlags

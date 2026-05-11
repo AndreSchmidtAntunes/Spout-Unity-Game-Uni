@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class EffectManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class EffectManager : MonoBehaviour
 
     [SerializeField] float river_shake_intensity = 1.0f;
     [SerializeField] CinemachineBasicMultiChannelPerlin CameraShakeNoise;
+    [SerializeField] Volume m_river_flowing_volume;
 
     private void Awake() {
         if (m_instance == null) {
@@ -57,11 +59,9 @@ public class EffectManager : MonoBehaviour
         float elapsed_time = 0;
 
         while (elapsed_time < duration) {
-
-            river_flowing_mat.SetFloat("_Active", curve.Evaluate(elapsed_time / duration));
-
-            Debug.Log(curve.Evaluate(elapsed_time / duration));
-
+            float normalized_elapsed_time = elapsed_time / duration;
+            river_flowing_mat.SetFloat("_Active", curve.Evaluate(normalized_elapsed_time));
+            m_river_flowing_volume.weight = curve.Evaluate(normalized_elapsed_time);
 
             yield return new WaitForFixedUpdate();
             elapsed_time += Time.fixedDeltaTime;
@@ -88,6 +88,16 @@ public class EffectManager : MonoBehaviour
             river_active = true;
         }
     }
+
+    private void OnDestroy() {
+        river_flowing_material.SetFloat("_Active", 0);
+        CameraShakeNoise.FrequencyGain = 0;
+        CameraShakeNoise.AmplitudeGain = 0;
+        m_river_flowing_volume.weight = 0;
+    }
+
+
+
     private bool can_run_river_start_cour = true; // used to force only one active coroutine for running the river starting animation.
     private IEnumerator StartRiverEventCour(float starting_duration) {
 
