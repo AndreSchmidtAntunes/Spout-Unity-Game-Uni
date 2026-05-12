@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(SphereCollider))]
 public class PlayerCharCon : MonoBehaviour
 {
     [SerializeField] private float m_moveSpeed = 5f;
@@ -14,6 +14,15 @@ public class PlayerCharCon : MonoBehaviour
     [SerializeField] private Billboard m_billboard;
 
     private Rigidbody m_rigidbody;
+    private SphereCollider m_collider;
+
+    public float collision_radius { 
+        get { 
+            if (m_collider == null) TryGetComponent(out m_collider);
+            return m_collider.radius; 
+        } 
+    }
+
 
     Vector2 move_input = Vector2.zero;
 
@@ -48,17 +57,24 @@ public class PlayerCharCon : MonoBehaviour
     void OnValidate() {
         GameManager.player = this;
         TryGetComponent(out m_rigidbody);
+        TryGetComponent(out m_collider);
     }
 
+    private Vector2 startPos;
+
     private void Start() {
+        startPos = transform.position;
         Physics.gravity = -transform.up * m_gravityMult;
         OnDamagedEvent.AddListener(OnDamaged);
     }
 
+
     private void OnDamaged(int new_health) {
         if (new_health == 0) { // dead
-            transform.position = new Vector3(GameManager.respawn_point.x, GameManager.respawn_point.y, transform.position.z);
+
             health = max_health;
+            Vector2 respawn_point = (RespawnZone.current_respawn_zone != null) ? RespawnZone.current_respawn_zone.respawn_point : startPos;
+            transform.position = new Vector3(respawn_point.x, respawn_point.y, transform.position.z);
         }
     }
 

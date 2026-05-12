@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2744545313762639406}
-  - component: {fileID: 4698351388453946818}
   m_Layer: 0
   m_Name: Silent NPC
   m_TagString: Untagged
@@ -33,36 +32,6 @@ Transform:
   - {fileID: 2878313235323949449}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4698351388453946818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3886755226480743103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b34083fa4cde45043b0ee250941986a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_dialogueType: 0
-  m_dialogue_lines:
-  - ':3 text 1
-
-'
-  - :D text 2 yay!!!
-  - woah a third one?!?!??!
-  - 'this is illigal
-
-'
-  - Im gonna call the police on you.
-  - too many text options!!!!
-  - AAAAAAAAAAAAAHHHHHHHHHHHHH!!!!!!!!!!!!!!
-  m_distance_to_player: 9
-  DialogueBox: {fileID: 0}
-  DialogueTMPs:
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &4229134240720224169
 GameObject:
   m_ObjectHideFlags: 0
@@ -89,9 +58,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4229134240720224169}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.17727782, z: -0, w: 0.98416084}
-  m_LocalPosition: {x: -0.14544214, y: 0.051653385, z: 0.39061308}
-  m_LocalScale: {x: 1.397398, y: 1.397398, z: 1.397398}
+  m_LocalRotation: {x: -0, y: 0.5862105, z: -0, w: 0.8101588}
+  m_LocalPosition: {x: 0.39242554, y: 0.075531006, z: 0.12919903}
+  m_LocalScale: {x: 1.4784359, y: 1.4784359, z: 1.4784359}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2878313235323949449}

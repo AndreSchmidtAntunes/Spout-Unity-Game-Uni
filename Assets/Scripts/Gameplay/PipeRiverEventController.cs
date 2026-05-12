@@ -1,14 +1,16 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class PipeRiverEventController : MonoBehaviour
 {
-    [SerializeField] float m_flow_duration = 4; // amount of time the river is dangerous
-
     [SerializeField] float m_warning_duration = 2;
+    [SerializeField] float m_start_duration = 4; // amount of time the river is dangerous
     [SerializeField] float m_end_duration = 2;
     [SerializeField] bool m_is_river_active = false;
     [SerializeField] private bool m_river_is_damaging = false;
+
+    [Serializable] public enum RiverAction { None, SetTrue, SetFalse, Toggle, Loop }
 
     public bool is_river_active {
         get { return (m_is_river_active); }
@@ -18,7 +20,7 @@ public class PipeRiverEventController : MonoBehaviour
 
             if (value)
             {
-                StartCoroutine(FireRiver(m_warning_duration, m_flow_duration, m_end_duration));
+                StartCoroutine(FireRiver(m_warning_duration, m_start_duration, m_end_duration));
             }
             else
             {
@@ -75,10 +77,52 @@ public class PipeRiverEventController : MonoBehaviour
         StartCoroutine(EventLoop());
     }
 
+    public static bool is_looping = true;
+
     IEnumerator EventLoop() {
-        while (true) {
-            yield return new WaitForSeconds(12);
-            is_river_active = true;
+        while (true)
+        {
+            yield return new WaitUntil(() => is_looping);
+            while (is_looping)
+            {
+                is_river_active = true;
+                yield return new WaitForSeconds(12);-+
+            }
+        }
+
+    }
+
+    public void SetRiverState(RiverAction state)
+    {
+        switch (state)
+        {
+            case RiverAction.SetTrue:
+                {
+                    is_looping = false;
+                    EffectManager.instance.StartRiverEvent(m_start_duration);
+                    break;
+                }
+            case RiverAction.SetFalse:
+                {
+                    is_looping = false;
+                    EffectManager.instance.EndRiverEvent(m_end_duration);
+                    break;
+                }
+            case RiverAction.Toggle:
+                {
+                    is_looping = false;
+                    if (EffectManager.instance.river_active)
+                        EffectManager.instance.EndRiverEvent(m_end_duration);
+                    else
+                        EffectManager.instance.StartRiverEvent(m_start_duration);
+                    break;
+                }
+            case RiverAction.Loop:
+                {
+                    is_looping = true;
+                    break;
+                }
+            default: break;
         }
     }
 }

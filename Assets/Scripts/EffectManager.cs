@@ -79,10 +79,9 @@ public class EffectManager : MonoBehaviour
         can_animate_river_visuals = true;
     }
 
-    private bool river_active = false;
-
+    public bool river_active { get; private set; } = false;
+    
     public void StartRiverEvent(float starting_duration) {
-
         if (!river_active) {
             StartCoroutine(StartRiverEventCour(starting_duration));
             river_active = true;
@@ -95,8 +94,6 @@ public class EffectManager : MonoBehaviour
         CameraShakeNoise.AmplitudeGain = 0;
         m_river_flowing_volume.weight = 0;
     }
-
-
 
     private bool can_run_river_start_cour = true; // used to force only one active coroutine for running the river starting animation.
     private IEnumerator StartRiverEventCour(float starting_duration) {

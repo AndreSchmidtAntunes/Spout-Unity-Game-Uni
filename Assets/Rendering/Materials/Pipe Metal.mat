@@ -105,11 +105,11 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - _Dot_Colour: {r: 0.297469, g: 0.3207547, b: 0.26477394, a: 1}
+    - _Dot_Colour: {r: 0.25715327, g: 0.25542894, b: 0.26415092, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _Emission: {r: 0.065681726, g: 0.09012356, b: 0.11320752, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Large_Shine_Strip: {r: 0.2677999, g: 0.32026613, b: 0.3207547, a: 1}
+    - _Large_Shine_Strip: {r: 0.23495907, g: 0.28079513, b: 0.3018868, a: 1}
     - _Primary: {r: 0.21502315, g: 0.27783704, b: 0.3018868, a: 1}
     - _Reflectance_Colour: {r: 0.2823959, g: 0.3584906, b: 0.3450621, a: 1}
     - _Rus_Colour: {r: 0.20754719, g: 0.13412248, b: 0.15761976, a: 1}

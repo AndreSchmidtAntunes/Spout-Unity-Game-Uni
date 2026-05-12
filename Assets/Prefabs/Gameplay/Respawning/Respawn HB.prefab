@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 982840387276267371}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -88.3, y: 16.15, z: -4.85}
+  m_LocalScale: {x: 0.27432635, y: 0.8565397, z: 3.1998377}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5978436597218345190}
@@ -47,10 +47,10 @@ BoxCollider:
     m_Bits: 8
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 448
+    m_Bits: 503
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 1
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 5, y: 15, z: 15}
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17ae46f8192a8ed4f841ecf4032e4735, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_respawn_point_transform: {fileID: 5978436597218345190}
+  m_respawn_point: {fileID: 5978436597218345190}
   override_checkpoint_id: 0
   checkpoint_id: -1
   priority_load: 0

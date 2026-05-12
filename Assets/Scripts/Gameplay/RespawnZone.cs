@@ -1,46 +1,40 @@
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class RespawnZone : MonoBehaviour
 {
-    [SerializeField] private Transform m_respawn_point_transform;
-    public Vector3 respawn_point { get { return m_respawn_point_transform.position; } }
+    [SerializeField] private Transform m_respawn_point;
+
+    public Vector2 respawn_point { get; private set; }
 
     [SerializeField] private bool override_checkpoint_id = false;
-    [SerializeField] private int checkpoint_id = -1; // Should be in order of when the player will touch each respawn zone;
+    public int checkpoint_id = -1; // Should be in order of when the player will touch each respawn zone;
 
     [SerializeField] private bool priority_load = false;
+    internal bool prioritise_id_over_position;
 
-    private Collider m_collider;
-
-    private void Start() {
-        if (priority_load) // load on start as soon as possible if needed
-            Init();
-        else
-            StartCoroutine(InitCoroutine());
+    private void Awake() {
+        Physics.Raycast(m_respawn_point.position, Vector3.down, out RaycastHit hit);
+        respawn_point = hit.point;
+        respawn_point += new Vector2(0, GameManager.player.collision_radius);
     }
 
-    // allow loading throughout multiple frames
-    private IEnumerator InitCoroutine() { Init(); yield return null; }
+    public static RespawnZone current_respawn_zone { get; private set; } = null;
 
-    private void Init()
+    private static bool ShouldSwitchRespawnZone(RespawnZone new_zone, RespawnZone old_zone)
     {
-        TryGetComponent(out m_collider);
-
-        GameManager.AddRespawnZone(this);
-    }
-
-    private void OnValidate() {
-        if (override_checkpoint_id) {
-            GameManager.SetRespawZoneIOf(this, checkpoint_id);
+        if (new_zone.prioritise_id_over_position) {
+            return new_zone.checkpoint_id > old_zone.checkpoint_id;
+        }
+        else {
+            return new_zone.respawn_point.x < old_zone.respawn_point.x;
         }
     }
 
-    private void OnCollisionEnter(Collision collision) {
-        GameManager.OnRespawnZoneHit(this);
-
+    private void OnTriggerEnter(Collider collision) {
+        if (current_respawn_zone == null || ShouldSwitchRespawnZone(this, current_respawn_zone)) {
+            current_respawn_zone = this;
+            Debug.Log("New respawn zone: " + current_respawn_zone.name);
+        }
     }
-
-    private void OnCollisionExit(Collision collision)  { }
 }
