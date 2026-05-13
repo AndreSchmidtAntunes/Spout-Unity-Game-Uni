@@ -1,4 +1,3 @@
-using System.Diagnostics;
 
 public static class GameManager
 {

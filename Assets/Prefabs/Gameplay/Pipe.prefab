@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6776837972235497705}
-  - component: {fileID: 3281059780948941276}
   - component: {fileID: 1561310208798156792}
+  - component: {fileID: 4122796050104459481}
   m_Layer: 0
   m_Name: Pipe
   m_TagString: Ground
@@ -34,23 +34,6 @@ Transform:
   - {fileID: 6827562078015064046}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &3281059780948941276
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2249052408246874528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b86976095946a5d478f91d4e7f9473ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_flow_duration: 3
-  m_warning_duration: 4
-  m_end_duration: 1.75
-  m_is_river_active: 0
-  m_river_is_damaging: 0
 --- !u!64 &1561310208798156792
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -73,6 +56,23 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5975983914636450168, guid: 47c2a4cd6294f6b4b8ad0e2c8182df09, type: 3}
+--- !u!114 &4122796050104459481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2249052408246874528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d75126749aa3eb542a29b61970b0a074, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_warning_duration: 3
+  m_start_duration: 1.75
+  m_end_duration: 2.5
+  m_loop_cooldown: 5
+  m_burst_duration: 2
 --- !u!1001 &6754056509316046916
 PrefabInstance:
   m_ObjectHideFlags: 0

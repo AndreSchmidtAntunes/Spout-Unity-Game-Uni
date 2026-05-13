@@ -5,11 +5,7 @@ using UnityEngine.Rendering;
 
 public class EffectManager : MonoBehaviour
 {
-    [SerializeField] private static EffectManager m_instance = null;
-    public static EffectManager instance {
-        private set { m_instance = value; }
-        get { return m_instance; }
-    }
+    public static EffectManager instance;
 
     [Header("River Event")]
 
@@ -26,8 +22,8 @@ public class EffectManager : MonoBehaviour
     [SerializeField] Volume m_river_flowing_volume;
 
     private void Awake() {
-        if (m_instance == null) {
-            m_instance = this;
+        if (instance == null) {
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -81,7 +77,7 @@ public class EffectManager : MonoBehaviour
 
     public bool river_active { get; private set; } = false;
     
-    public void StartRiverEvent(float starting_duration) {
+    public void RiverStartAnimation(float starting_duration) {
         if (!river_active) {
             StartCoroutine(StartRiverEventCour(starting_duration));
             river_active = true;
@@ -106,7 +102,7 @@ public class EffectManager : MonoBehaviour
         }
     }
 
-    public void EndRiverEvent(float ending_duration) {
+    public void RiverEndAnimation(float ending_duration) {
 
         if (river_active) { // allow the ending of the animation to be queued by ignoring if an animation is currently playing
             StartCoroutine(EndRiverEventCour(ending_duration));

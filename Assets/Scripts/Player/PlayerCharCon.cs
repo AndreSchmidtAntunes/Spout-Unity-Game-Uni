@@ -1,17 +1,19 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(SphereCollider))]
 public class PlayerCharCon : MonoBehaviour
 {
     [SerializeField] private float m_moveSpeed = 5f;
-    [SerializeField] private float m_jumpPower = 5f;
+    [SerializeField] private float m_jumpPower = .5f;
+    [SerializeField] private float m_slingPower = .8f;
     [SerializeField] private float m_coyotyTime = 0.55f;
     [SerializeField][Min(0)] private float m_gravityMult = 5;
     [SerializeField] private Transform m_bottomPosition;
     [SerializeField] private Billboard m_billboard;
+    public bool movement_enabled = false;
 
     private Rigidbody m_rigidbody;
     private SphereCollider m_collider;
@@ -22,7 +24,6 @@ public class PlayerCharCon : MonoBehaviour
             return m_collider.radius; 
         } 
     }
-
 
     Vector2 move_input = Vector2.zero;
 
@@ -35,14 +36,14 @@ public class PlayerCharCon : MonoBehaviour
     [SerializeField][Range(0,100)] private int m_health = max_health;
 
     const float invincibility_time = 0.75f;
-    float invincibility_time_remaining = invincibility_time;
+    float _invincibility_time_remaining = invincibility_time;
 
     public int health {
         get { return m_health; }
         set {
-            if (value < m_health && invincibility_time_remaining <= 0) { // if can take damage
+            if (value < m_health && _invincibility_time_remaining <= 0) { // if can take damage
                 m_health = (value < 0) ? 0 : value;
-                invincibility_time_remaining = invincibility_time;
+                _invincibility_time_remaining = invincibility_time;
                 OnHealthChangedEvent.Invoke(m_health);
                 OnDamagedEvent.Invoke(m_health);
             }
@@ -97,26 +98,33 @@ public class PlayerCharCon : MonoBehaviour
     } }
 
     private void FixedUpdate() {
+
+        if (!movement_enabled) return;
+
         // cubing the user's input for a more snappy response.
         m_rigidbody.AddForce((move_input.x * move_input.x * move_input.x) * m_moveSpeed * Time.fixedDeltaTime * Vector3.right);
 
-        invincibility_time_remaining -= Time.fixedDeltaTime;
+        health -= current_damage_being_applied; // invincibility is handled by <health>'s setter.
 
-        health -= current_damage_being_applied;
+        // -- clocks -- //
 
-        if(!grounded)
-            seconds_since_last_grounded += Time.fixedDeltaTime;
+        _invincibility_time_remaining -= Time.fixedDeltaTime;
 
-        if (jump_cooldown_remaining > 0)
-            jump_cooldown_remaining -= Time.fixedDeltaTime;
+        if (!grounded)
+            _seconds_since_last_grounded += Time.fixedDeltaTime;
+
+        if (_jump_cooldown_remaining > 0)
+            _jump_cooldown_remaining -= Time.fixedDeltaTime;
     }
 
-
     public void Move(InputAction.CallbackContext context) {
+
         Vector2 input = context.ReadValue<Vector2>();
         move_input = input;
 
-        if(input.x > 0) {
+        if (!movement_enabled) return;
+
+        if (input.x > 0) {
             m_billboard.m_flip = false;
         }
         else if (input.x < 0)
@@ -125,37 +133,59 @@ public class PlayerCharCon : MonoBehaviour
         }
     }
 
-    bool is_jump_button_down = false;
+    bool _is_jump_button_down = false;
 
     const float jump_cooldown = 0.25f;
-    const int max_jumps = 1;
+    const int max_jumps = 2;
 
     int jumps_remaining = max_jumps;
-    float jump_cooldown_remaining = jump_cooldown;
+    float _jump_cooldown_remaining = jump_cooldown;
 
     public void Jump(InputAction.CallbackContext context) {
 
-        if (context.started) is_jump_button_down = true;
-        else if (context.canceled) is_jump_button_down = false;
+        if (context.started) _is_jump_button_down = true;
+        else if (context.canceled) _is_jump_button_down = false;
     }
 
     void LateUpdate() {
-        if (is_jump_button_down) {
-            if (jumps_remaining > 0 && jump_cooldown_remaining <= 0 && IsGrounded()) {
-                m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0, m_rigidbody.linearVelocity.z);
-                m_rigidbody.AddForce(transform.up * m_jumpPower, ForceMode.Impulse);
-                jump_cooldown_remaining = jump_cooldown;
+        
+        if (_is_jump_button_down && movement_enabled) {
+            if (jumps_remaining > 0 && _jump_cooldown_remaining <= 0) {
+                if (jumps_remaining == max_jumps) { // grounded jump
+                    m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0, m_rigidbody.linearVelocity.z); // set y velocity to 0.
+                    m_rigidbody.AddForce(transform.up * m_jumpPower, ForceMode.Impulse);
+                }
+                else {  // sling jump
+                    // Thank you to this post (https://stackoverflow.com/a/1437934) for the equation to get a direction index from a direction.
+                    int direction_index = (Mathf.RoundToInt(Mathf.Atan2(move_input.y, move_input.x) / (2 * Mathf.PI / 8)) + 8) % 8;
+
+                    const float one_over_sqrt2 = 0.70710678118f;
+
+                    Vector2 target_direction = direction_index switch {
+                        0 => Vector2.right,                                 // E
+                        1 => new Vector2(one_over_sqrt2, one_over_sqrt2),   // NE
+                        2 => Vector2.up,                                    // N
+                        3 => new Vector2(-one_over_sqrt2, one_over_sqrt2),  // NW
+                        4 => Vector2.left,                                  // W
+                        5 => Vector2.left,                                  // W
+                        6 => Vector2.up,                                    // N
+                        7 => Vector2.right,                                 // E
+                    };
+                    /// TODO: 
+                    m_rigidbody.linearVelocity = Vector3.zero;
+                    m_rigidbody.AddForce(target_direction * m_slingPower, ForceMode.Impulse);
+                }
+                _jump_cooldown_remaining = jump_cooldown;
                 jumps_remaining--;
             }
         }
-
     }
 
     private bool IsGrounded() {
-        return grounded || seconds_since_last_grounded <= m_coyotyTime;
+        return grounded || _seconds_since_last_grounded <= m_coyotyTime;
     }
 
-float seconds_since_last_grounded;
+float _seconds_since_last_grounded;
 
 bool _grounded = false;
     bool grounded {
@@ -173,7 +203,7 @@ bool _grounded = false;
             else {
                 Physics.gravity = -transform.up * m_gravityMult;
                 m_rigidbody.useGravity = true;
-                seconds_since_last_grounded = 0;
+                _seconds_since_last_grounded = 0;
             }
         }
     }
