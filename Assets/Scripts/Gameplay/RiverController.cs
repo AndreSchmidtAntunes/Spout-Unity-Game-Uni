@@ -4,24 +4,22 @@ using UnityEngine;
 
 public class RiverController : MonoBehaviour
 {
-    public static RiverController instance;
+    [SerializeField] public static RiverController instance = null;
 
     [SerializeField] float m_warning_duration = 3;
     [SerializeField] float m_start_duration = 1.75f;
     [SerializeField] float m_end_duration = 2.5f;
     [SerializeField] float m_loop_cooldown = 5;
     [SerializeField] float m_burst_duration = 2;
-    private bool m_river_is_damaging = false;
+    [SerializeField] BoxCollider m_damage_box;
 
     [Serializable] public enum RiverAction { None, Enable, Disable, Toggle, FireOnce, Loop }
-    // the Run action starts then stops the river on it's own.
 
     bool is_river_flowing = false;
 
     private Coroutine current_river_event;
 
-    private void OnValidate()
-    {
+    private void Awake() {
         if (instance == null)
             instance = this;
     }
@@ -31,12 +29,13 @@ public class RiverController : MonoBehaviour
         is_river_flowing = true;
 
         yield return new WaitForSeconds(m_warning_duration);
-        m_river_is_damaging = true;
+        m_damage_box.enabled = true;
 
         yield return new WaitForSeconds(m_burst_duration);
 
         EffectManager.instance?.RiverEndAnimation(m_end_duration);
-        m_river_is_damaging = false;
+        m_damage_box.enabled = false;
+
         is_river_flowing = false;
 
         yield return new WaitForSeconds(m_end_duration);
@@ -47,6 +46,7 @@ public class RiverController : MonoBehaviour
         EffectManager.instance?.RiverStartAnimation(m_warning_duration);
         is_river_flowing = true;
         yield return new WaitForSeconds(m_warning_duration);
+        m_damage_box.enabled = true;
         current_river_event = null;
     }
 
@@ -54,6 +54,7 @@ public class RiverController : MonoBehaviour
         EffectManager.instance?.RiverEndAnimation(m_end_duration);
         is_river_flowing = false;
         yield return new WaitForSeconds(m_end_duration);
+        m_damage_box.enabled = false;
         current_river_event = null;
     }
 
@@ -62,39 +63,19 @@ public class RiverController : MonoBehaviour
         while (true)
         {
             EffectManager.instance?.RiverStartAnimation(m_warning_duration);
+
+            
             is_river_flowing = true;
 
             yield return new WaitForSeconds(m_warning_duration);
-            m_river_is_damaging = true;
-
+            m_damage_box.enabled = true;
             yield return new WaitForSeconds(m_burst_duration);
 
             EffectManager.instance?.RiverEndAnimation(m_end_duration);
-            m_river_is_damaging = false;
+            m_damage_box.enabled = false;
             is_river_flowing = false;
             yield return new WaitForSeconds(m_end_duration);
             yield return new WaitForSeconds(m_loop_cooldown);
-        }
-    }
-
-    bool is_player_touching = false;
-
-    private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.tag == "Player")
-            is_player_touching = true;
-    }
-
-    private void OnCollisionExit(Collision collision) {
-        if (collision.gameObject.tag == "Player")
-            is_player_touching = false;
-    }
-
-    void FixedUpdate()
-    {
-        if (m_river_is_damaging && is_player_touching)
-        {
-            // send kill request to player
-            GameManager.player.health = 0;
         }
     }
 

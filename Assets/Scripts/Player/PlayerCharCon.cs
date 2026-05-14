@@ -9,8 +9,10 @@ public class PlayerCharCon : MonoBehaviour
     [SerializeField] private float m_moveSpeed = 5f;
     [SerializeField] private float m_jumpPower = .5f;
     [SerializeField] private float m_slingPower = .8f;
+    [SerializeField] [Min(0)] private int m_maxSlings = 1;
     [SerializeField] private float m_coyotyTime = 0.55f;
-    [SerializeField][Min(0)] private float m_gravityMult = 5;
+    [SerializeField] private Vector2 m_gravity = Vector2.down * 9.8f;
+    [SerializeField] private AnimationCurve m_gravity_mult_graph = AnimationCurve.Linear(0, 0, 1, 1);
     [SerializeField] private Transform m_bottomPosition;
     [SerializeField] private Billboard m_billboard;
     public bool movement_enabled = false;
@@ -65,7 +67,6 @@ public class PlayerCharCon : MonoBehaviour
 
     private void Start() {
         startPos = transform.position;
-        Physics.gravity = -transform.up * m_gravityMult;
         OnDamagedEvent.AddListener(OnDamaged);
     }
 
@@ -95,14 +96,25 @@ public class PlayerCharCon : MonoBehaviour
             highest_value = (damager.damage_delt > highest_value) ? damager.damage_delt : highest_value;
         }
         return highest_value;
-    } }
+    }}
+
+    Vector2 ground_tangent = Vector2.right;
 
     private void FixedUpdate() {
+        if (!IsGrounded()) { // gravity
+            if (is_touching_celeing) {
+                m_rigidbody.AddForce(m_gravity * Time.fixedDeltaTime, ForceMode.Impulse);
+            }
+            else {
+                float gravity_mult = m_gravity_mult_graph.Evaluate(m_rigidbody.linearVelocity.y);
+                m_rigidbody.AddForce(m_gravity * gravity_mult * Time.fixedDeltaTime, ForceMode.Impulse);
+            }
+
+        }
 
         if (!movement_enabled) return;
 
-        // cubing the user's input for a more snappy response.
-        m_rigidbody.AddForce((move_input.x * move_input.x * move_input.x) * m_moveSpeed * Time.fixedDeltaTime * Vector3.right);
+        m_rigidbody.AddForce(move_input.x * m_moveSpeed * Time.fixedDeltaTime * ground_tangent);
 
         health -= current_damage_being_applied; // invincibility is handled by <health>'s setter.
 
@@ -138,7 +150,7 @@ public class PlayerCharCon : MonoBehaviour
     const float jump_cooldown = 0.25f;
     const int max_jumps = 2;
 
-    int jumps_remaining = max_jumps;
+    int jumps_remaining = 0;
     float _jump_cooldown_remaining = jump_cooldown;
 
     public void Jump(InputAction.CallbackContext context) {
@@ -149,31 +161,39 @@ public class PlayerCharCon : MonoBehaviour
 
     void LateUpdate() {
         
-        if (_is_jump_button_down && movement_enabled) {
+        if (movement_enabled && _is_jump_button_down) {
             if (jumps_remaining > 0 && _jump_cooldown_remaining <= 0) {
-                if (jumps_remaining == max_jumps) { // grounded jump
+                if (jumps_remaining == m_maxSlings + 1) { // grounded jump
                     m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0, m_rigidbody.linearVelocity.z); // set y velocity to 0.
                     m_rigidbody.AddForce(transform.up * m_jumpPower, ForceMode.Impulse);
                 }
                 else {  // sling jump
-                    // Thank you to this post (https://stackoverflow.com/a/1437934) for the equation to get a direction index from a direction.
-                    int direction_index = (Mathf.RoundToInt(Mathf.Atan2(move_input.y, move_input.x) / (2 * Mathf.PI / 8)) + 8) % 8;
+                    Vector2 target_direction;
+                    if (Mathf.Abs(move_input.x) + Mathf.Abs(move_input.y) < 0.1) { // if direction is near 0
+                        target_direction = Vector2.up;
+                    }
+                    else {
+                        // Thank you to this post (https://stackoverflow.com/a/1437934) for the equation to get a direction index from a direction.
+                        int direction_index = (Mathf.RoundToInt(Mathf.Atan2(move_input.y, move_input.x) / (2 * Mathf.PI / 8)) + 8) % 8;
 
-                    const float one_over_sqrt2 = 0.70710678118f;
+                        const float one_over_sqrt2 = 0.70710678118f;
 
-                    Vector2 target_direction = direction_index switch {
-                        0 => Vector2.right,                                 // E
-                        1 => new Vector2(one_over_sqrt2, one_over_sqrt2),   // NE
-                        2 => Vector2.up,                                    // N
-                        3 => new Vector2(-one_over_sqrt2, one_over_sqrt2),  // NW
-                        4 => Vector2.left,                                  // W
-                        5 => Vector2.left,                                  // W
-                        6 => Vector2.up,                                    // N
-                        7 => Vector2.right,                                 // E
-                    };
+                        target_direction = direction_index switch {
+                            0 => Vector2.right,                                 // E
+                            1 => new Vector2(one_over_sqrt2, one_over_sqrt2),   // NE
+                            2 => Vector2.up,                                    // N
+                            3 => new Vector2(-one_over_sqrt2, one_over_sqrt2),  // NW
+                            4 => Vector2.left,                                  // W
+                            5 => Vector2.left,                                  // W
+                            6 => Vector2.up,                                    // N
+                            7 => Vector2.right,                                 // E
+                        };
+                    }
+
                     /// TODO: 
                     m_rigidbody.linearVelocity = Vector3.zero;
                     m_rigidbody.AddForce(target_direction * m_slingPower, ForceMode.Impulse);
+                    m_rigidbody.AddForce(Vector2.up * 1f, ForceMode.Impulse);
                 }
                 _jump_cooldown_remaining = jump_cooldown;
                 jumps_remaining--;
@@ -196,27 +216,20 @@ bool _grounded = false;
             _grounded = value;
 
             if (_grounded) {
-                Physics.gravity = -transform.up * m_gravityMult;
-                m_rigidbody.useGravity = false;
-                jumps_remaining = max_jumps;
+                jumps_remaining = m_maxSlings + 1; // the extra 1 is the jump from the ground.
             }
             else {
-                Physics.gravity = -transform.up * m_gravityMult;
-                m_rigidbody.useGravity = true;
                 _seconds_since_last_grounded = 0;
             }
         }
     }
 
     private void OnCollisionEnter(Collision collision) {
-        switch (collision.gameObject.tag)
-        {
-            case "Ground": { // player landed on ground
-                    grounded = true;
-                    break;
-            }
-            default: { break; }
-        }
+        CheckGroundedAndCeiling(collision);
+    }
+
+    private void OnCollisionStay(Collision collision) {
+        CheckGroundedAndCeiling(collision);
     }
 
     private void OnCollisionExit(Collision collision) {
@@ -224,27 +237,43 @@ bool _grounded = false;
         {
             case "Ground": { // player stopped being grounded
                     grounded = false;
+                    ground_tangent = Vector2.right;
                     break;
             }
             default: break;
         }
     }
 
-    private void OnCollisionStay(Collision collision)
-    {
+    bool is_touching_celeing = false;
+
+
+
+    void CheckGroundedAndCeiling(Collision collision) {
         switch (collision.gameObject.tag)
         {
             case "Ground":
                 {
-                    foreach (ContactPoint contact in collision.contacts) {
-                        grounded = contact.normal.y > 0;
-                        if (grounded) break; // no need to check all contacts when one confirming the player is grounded has already been found
+                    ground_tangent = Vector2.right; // default value (value while in the air)
+                    is_touching_celeing = false; // default value
+                    foreach (ContactPoint contact in collision.contacts)
+                    {
+                        Vector2 normal = contact.normal;
+                        grounded = normal.y > 0;
+                        if (grounded)
+                        {
+                            ground_tangent = new Vector2(normal.y, -normal.x);
+                            break; // no need to check all contacts when one confirming the player is grounded has already been found
+                        }
+                        else if (!is_touching_celeing)
+                        {
+                            is_touching_celeing = (normal.y < -0.25f);
+                        }
                     }
-
                     break;
                 }
             default: break;
         }
+        if (is_touching_celeing) Debug.Log("Ceiling");
     }
 
 }

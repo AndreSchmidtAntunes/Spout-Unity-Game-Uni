@@ -16,8 +16,8 @@ public class Billboard : MonoBehaviour
 
     [SerializeField] public bool m_flip = false;
 
-    Camera m_camera;
-    float camera_focal_length;
+    static Camera m_camera;
+    static float camera_focal_length;
 
     public static Camera GetCurrentCamera()
     {
@@ -36,7 +36,7 @@ public class Billboard : MonoBehaviour
         return Camera.main;
     }
 
-    void OnValidate() {
+    static void OnValidate() {
         m_camera = GetCurrentCamera();
         camera_focal_length = 1 / Mathf.Tan(m_camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
     }
@@ -73,13 +73,21 @@ public class Billboard : MonoBehaviour
             m_billboardVisual.Rotate(0, 180, 0);
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
+        if (m_camera == null) return; 
         UpdateBillboardState();
     }
 
+    static void LateUpdate() {
+        if (m_camera == null) return;
+        camera_focal_length = 1 / Mathf.Tan(m_camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
+    }
+    private void Awake() {
+        m_camera = GetCurrentCamera();
+    }
+
     void OnDrawGizmos() {
+        if (m_camera == null) return;
         UpdateBillboardState();
     }
 }
