@@ -76,7 +76,7 @@ Material:
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
     - _ShadowMatteFilter: 2.006836
-    - _Shadow_Mag: 0.26
+    - _Shadow_Mag: 0.31
     - _Smoothness: 0.18
     - _SrcBlend: 1
     - _StencilRef: 0
