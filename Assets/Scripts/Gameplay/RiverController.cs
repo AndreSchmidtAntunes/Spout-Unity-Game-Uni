@@ -6,8 +6,7 @@ public class RiverController : MonoBehaviour
 {
     [SerializeField] public static RiverController instance = null;
 
-    [SerializeField] float m_warning_duration = 3;
-    [SerializeField] float m_start_duration = 1.75f;
+    [SerializeField] float m_start_duration = 3;
     [SerializeField] float m_end_duration = 2.5f;
     [SerializeField] float m_loop_cooldown = 5;
     [SerializeField] float m_burst_duration = 2;
@@ -25,10 +24,10 @@ public class RiverController : MonoBehaviour
     }
 
     private IEnumerator FireOnceCour() {
-        EffectManager.instance?.RiverStartAnimation(m_warning_duration);
+        EffectManager.instance?.RiverStartAnimation(m_start_duration);
         is_river_flowing = true;
 
-        yield return new WaitForSeconds(m_warning_duration);
+        yield return new WaitForSeconds(m_start_duration);
         m_damage_box.enabled = true;
 
         yield return new WaitForSeconds(m_burst_duration);
@@ -43,9 +42,9 @@ public class RiverController : MonoBehaviour
     }
 
     private IEnumerator EnableCour () {
-        EffectManager.instance?.RiverStartAnimation(m_warning_duration);
+        EffectManager.instance?.RiverStartAnimation(m_start_duration);
         is_river_flowing = true;
-        yield return new WaitForSeconds(m_warning_duration);
+        yield return new WaitForSeconds(m_start_duration);
         m_damage_box.enabled = true;
         current_river_event = null;
     }
@@ -62,12 +61,12 @@ public class RiverController : MonoBehaviour
     {
         while (true)
         {
-            EffectManager.instance?.RiverStartAnimation(m_warning_duration);
+            EffectManager.instance?.RiverStartAnimation(m_start_duration);
 
-            
+
             is_river_flowing = true;
 
-            yield return new WaitForSeconds(m_warning_duration);
+            yield return new WaitForSeconds(m_start_duration);
             m_damage_box.enabled = true;
             yield return new WaitForSeconds(m_burst_duration);
 

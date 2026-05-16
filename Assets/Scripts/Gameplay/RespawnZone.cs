@@ -7,10 +7,8 @@ public class RespawnZone : MonoBehaviour
 
     public Vector2 respawn_point { get; private set; }
 
-    [SerializeField] private bool override_checkpoint_id = false;
     public int checkpoint_id = -1; // Should be in order of when the player will touch each respawn zone;
 
-    [SerializeField] private bool priority_load = false;
     internal bool prioritise_id_over_position;
 
     private void Awake() {

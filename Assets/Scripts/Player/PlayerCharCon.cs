@@ -20,11 +20,11 @@ public class PlayerCharCon : MonoBehaviour
     private Rigidbody m_rigidbody;
     private SphereCollider m_collider;
 
-    public float collision_radius { 
-        get { 
+    public float collision_radius {
+        get {
             if (m_collider == null) TryGetComponent(out m_collider);
-            return m_collider.radius; 
-        } 
+            return m_collider.radius;
+        }
     }
 
     Vector2 move_input = Vector2.zero;
@@ -160,7 +160,7 @@ public class PlayerCharCon : MonoBehaviour
     }
 
     void LateUpdate() {
-        
+
         if (movement_enabled && _is_jump_button_down) {
             if (jumps_remaining > 0 && _jump_cooldown_remaining <= 0) {
                 if (jumps_remaining == m_maxSlings + 1) { // grounded jump
@@ -178,7 +178,8 @@ public class PlayerCharCon : MonoBehaviour
 
                         const float one_over_sqrt2 = 0.70710678118f;
 
-                        target_direction = direction_index switch {
+                        target_direction = direction_index switch
+                        {
                             0 => Vector2.right,                                 // E
                             1 => new Vector2(one_over_sqrt2, one_over_sqrt2),   // NE
                             2 => Vector2.up,                                    // N
@@ -187,13 +188,17 @@ public class PlayerCharCon : MonoBehaviour
                             5 => Vector2.left,                                  // W
                             6 => Vector2.up,                                    // N
                             7 => Vector2.right,                                 // E
+                            _ => throw new System.NotImplementedException(),
                         };
                     }
 
-                    /// TODO: 
                     m_rigidbody.linearVelocity = Vector3.zero;
-                    m_rigidbody.AddForce(target_direction * m_slingPower, ForceMode.Impulse);
-                    m_rigidbody.AddForce(Vector2.up * 1f, ForceMode.Impulse);
+
+                    Vector2 force = target_direction * m_slingPower;
+                    force += Vector2.up * 1f;
+                    m_rigidbody.AddForce(force, ForceMode.Impulse);
+
+                    WebLineRenderer.Render(transform.position, force.normalized);
                 }
                 _jump_cooldown_remaining = jump_cooldown;
                 jumps_remaining--;

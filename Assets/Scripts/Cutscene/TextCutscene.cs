@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using Unity.Cinemachine;
 using System.Collections;
 
@@ -10,7 +11,6 @@ public class TextCutscene : MonoBehaviour
     [SerializeField] RunType m_runEvent = RunType.None;
     [SerializeField] CinemachineCamera m_cutsceneCamera;
     [SerializeField] string[] m_text;
-
 
     int trigger_enter_count = 0;
     private void OnTriggerEnter(Collider other) {
@@ -30,13 +30,13 @@ public class TextCutscene : MonoBehaviour
 
     private IEnumerator CutsceneCour() {
         m_cutsceneCamera.Priority += 100;
-        if (m_disablePlayerMovement) 
+        if (m_disablePlayerMovement)
             GameManager.player.movement_enabled = false;
 
         yield return StartCoroutine(UIManager.instance.playerTextbox.DisplayTextArray(m_text));
 
         m_cutsceneCamera.Priority -= 100;
-        if (m_disablePlayerMovement) 
+        if (m_disablePlayerMovement)
             GameManager.player.movement_enabled = true;
     }
 }

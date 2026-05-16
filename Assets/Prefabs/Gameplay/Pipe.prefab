@@ -69,12 +69,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75126749aa3eb542a29b61970b0a074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_warning_duration: 3
-  m_start_duration: 1.75
-  m_end_duration: 2.5
-  m_loop_cooldown: 5
-  m_burst_duration: 2
-  m_damage_box: {fileID: 0}
+  m_start_duration: 1.15
+  m_end_duration: 0.85
+  m_loop_cooldown: 1.75
+  m_burst_duration: 2.25
+  m_damage_box: {fileID: 3840809072435103509}
 --- !u!1 &9175044528675774965
 GameObject:
   m_ObjectHideFlags: 0

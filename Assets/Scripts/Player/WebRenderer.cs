@@ -24,7 +24,7 @@ public class WebRenderer : MonoBehaviour
             if (m_material != null)
             _lineRenderer.material = m_material;
         }
-        else { 
+        else {
             _lineRenderer = gameObject.AddComponent<LineRenderer>();
         }
 

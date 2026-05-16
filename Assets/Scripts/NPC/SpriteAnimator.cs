@@ -58,8 +58,14 @@ public class SpriteAnimator : MonoBehaviour
 
     void OnBecameVisible() {
         animate = true;
+        float time_offset = 0;
 
-        int elapsed_frames = Mathf.FloorToInt((Time.fixedTime * FPS) + start_frame);
+        if(random_start_frame) {
+            Random.state = new Random.State();
+            time_offset = Random.Range(0, sprites.Length * frame_duration);
+        }
+
+        int elapsed_frames = Mathf.FloorToInt(((Time.fixedTime + time_offset) * FPS) + start_frame);
         int number_of_loops = Mathf.FloorToInt(elapsed_frames / sprites.Length);
 
         int current_frame = elapsed_frames - (sprites.Length * number_of_loops);
