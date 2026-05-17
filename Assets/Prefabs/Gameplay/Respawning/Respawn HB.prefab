@@ -49,8 +49,8 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 503
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 5, y: 15, z: 15}
@@ -68,9 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_respawn_point: {fileID: 5978436597218345190}
-  override_checkpoint_id: 0
   checkpoint_id: -1
-  priority_load: 0
 --- !u!1 &5027859272436327044
 GameObject:
   m_ObjectHideFlags: 0

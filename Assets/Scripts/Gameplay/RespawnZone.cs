@@ -14,7 +14,7 @@ public class RespawnZone : MonoBehaviour
     private void Awake() {
         Physics.Raycast(m_respawn_point.position, Vector3.down, out RaycastHit hit);
         respawn_point = hit.point;
-        respawn_point += new Vector2(0, GameManager.player.collision_radius);
+        respawn_point += new Vector2(0, GameManager.instance.player.collision_radius);
     }
 
     public static RespawnZone current_respawn_zone { get; private set; } = null;

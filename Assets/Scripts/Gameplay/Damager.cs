@@ -10,7 +10,7 @@ public class Damager : MonoBehaviour
 
     [SerializeField] bool m_override_invincibility = false;
     public bool override_invincibility { get { return m_override_invincibility; } }
-    
+
     [SerializeField] bool m_override_i_frames = false;
     public bool override_i_frames { get { return m_override_i_frames; } }
 
@@ -21,7 +21,7 @@ public class Damager : MonoBehaviour
     private void Start() {
         if (priority_load) // load on start as soon as possible if needed
             Init();
-        else 
+        else
             StartCoroutine(InitCoroutine());
     }
 
@@ -33,8 +33,8 @@ public class Damager : MonoBehaviour
 
     // Only player can collide with a damager, so a check doesn't need to occur.
     private void OnCollisionEnter(Collision collision)
-    { GameManager.player.touching_damagers.Add(this);    }
+    { GameManager.instance.player.touching_damagers.Add(this);    }
 
     private void OnCollisionExit(Collision collision)
-    { GameManager.player.touching_damagers.Remove(this); }
+    { GameManager.instance.player.touching_damagers.Remove(this); }
 }

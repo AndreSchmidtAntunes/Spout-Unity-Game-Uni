@@ -29,7 +29,7 @@ public class Dialogue : MonoBehaviour
     {
         while (true)
         {
-            if (GameManager.player && Vector3.SqrMagnitude(GameManager.player.transform.position - transform.position) <= m_distance_to_player * m_distance_to_player)
+            if (GameManager.instance.player && Vector3.SqrMagnitude(GameManager.instance.player.transform.position - transform.position) <= m_distance_to_player * m_distance_to_player)
             {
                 if (showing_dialogue == false)
                 {

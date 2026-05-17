@@ -33,6 +33,7 @@ public class PlayerCharCon : MonoBehaviour
     [HideInInspector] public UnityEvent<int> OnHealthChangedEvent;
     [HideInInspector] public UnityEvent<int> OnDamagedEvent;
     [HideInInspector] public UnityEvent<int> OnHealedEvent;
+    [HideInInspector] public UnityEvent<int> OnSlingValuesChanged; // <new remaining slings>
 
     public const int max_health = 100;
     [SerializeField][Range(0,100)] private int m_health = max_health;
@@ -58,9 +59,15 @@ public class PlayerCharCon : MonoBehaviour
     }
 
     void OnValidate() {
-        GameManager.player = this;
+        AddToGameManager();
         TryGetComponent(out m_rigidbody);
         TryGetComponent(out m_collider);
+    }
+
+
+    private void Awake() {
+        if (m_rigidbody == null) TryGetComponent(out m_rigidbody);
+        if (m_collider == null) TryGetComponent(out m_collider);
     }
 
     private Vector2 startPos;
@@ -68,8 +75,16 @@ public class PlayerCharCon : MonoBehaviour
     private void Start() {
         startPos = transform.position;
         OnDamagedEvent.AddListener(OnDamaged);
+        GameManager.instance.onInitialised.AddListener(AddToGameManager);
     }
 
+    private void AddToGameManager() {
+        if (GameManager.instance.player == null) {
+            if (GameManager.is_instanced) {
+                GameManager.instance.player = this;
+            }
+        }
+    }
 
     private void OnDamaged(int new_health) {
         if (new_health == 0) { // dead
@@ -80,7 +95,7 @@ public class PlayerCharCon : MonoBehaviour
         }
     }
 
-    private void OnDestroy() { GameManager.player = null; }
+    private void OnDestroy() { GameManager.instance.player = null; }
 
     [HideInInspector] public System.Collections.Generic.List<Damager> touching_damagers;
 
@@ -148,16 +163,23 @@ public class PlayerCharCon : MonoBehaviour
     bool _is_jump_button_down = false;
 
     const float jump_cooldown = 0.25f;
-    const int max_jumps = 2;
 
-    int jumps_remaining = 0;
+    int _jumps_remaining = 0;
+    int jumps_remaining {
+        get {
+            return _jumps_remaining;
+        }
+        set {
+            _jumps_remaining = value;
+        }
+    }
     float _jump_cooldown_remaining = jump_cooldown;
 
     public void Jump(InputAction.CallbackContext context) {
 
         if (context.started) _is_jump_button_down = true;
-        else if (context.canceled) _is_jump_button_down = false;
-    }
+            else if (context.canceled) _is_jump_button_down = false;
+        }
 
     void LateUpdate() {
 
@@ -166,6 +188,8 @@ public class PlayerCharCon : MonoBehaviour
                 if (jumps_remaining == m_maxSlings + 1) { // grounded jump
                     m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0, m_rigidbody.linearVelocity.z); // set y velocity to 0.
                     m_rigidbody.AddForce(transform.up * m_jumpPower, ForceMode.Impulse);
+                    OnSlingValuesChanged.Invoke(m_maxSlings);
+
                 }
                 else {  // sling jump
                     Vector2 target_direction;
@@ -199,6 +223,8 @@ public class PlayerCharCon : MonoBehaviour
                     m_rigidbody.AddForce(force, ForceMode.Impulse);
 
                     WebLineRenderer.Render(transform.position, force.normalized);
+
+                    OnSlingValuesChanged.Invoke(jumps_remaining - 1);
                 }
                 _jump_cooldown_remaining = jump_cooldown;
                 jumps_remaining--;
@@ -222,6 +248,8 @@ bool _grounded = false;
 
             if (_grounded) {
                 jumps_remaining = m_maxSlings + 1; // the extra 1 is the jump from the ground.
+                OnSlingValuesChanged.Invoke(m_maxSlings);
+
             }
             else {
                 _seconds_since_last_grounded = 0;
@@ -251,8 +279,6 @@ bool _grounded = false;
 
     bool is_touching_celeing = false;
 
-
-
     void CheckGroundedAndCeiling(Collision collision) {
         switch (collision.gameObject.tag)
         {
@@ -279,6 +305,11 @@ bool _grounded = false;
             default: break;
         }
         if (is_touching_celeing) Debug.Log("Ceiling");
+    }
+
+    public void SetMaxSlings(int count) {
+
+        m_maxSlings = Mathf.Max(count, 0);
     }
 
 }

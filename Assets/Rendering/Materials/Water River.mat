@@ -122,7 +122,7 @@ Material:
     - _TransparentZWrite: 1
     - _UseColorAbsorption: 1
     - _UseShadowThreshold: 0
-    - _Water_depth: 0.35
+    - _Water_depth: 0.63
     - _Wave_strength: 0.27
     - _ZTest: 4
     - _ZTestDepthEqualForOpaque: 2
@@ -130,7 +130,7 @@ Material:
     - _ZTestTransparent: 2
     - _ZWrite: 1
     - _ZWriteControl: 0
-    - _depth_fade_distance: 0.58
+    - _depth_fade_distance: 0.32
     m_Colors:
     - _BG: {r: 0.23300104, g: 0.25923252, b: 0.26415092, a: 1}
     - _Depth_Colour: {r: 0.15325737, g: 0.26415092, b: 0.24397218, a: 0.043137256}
