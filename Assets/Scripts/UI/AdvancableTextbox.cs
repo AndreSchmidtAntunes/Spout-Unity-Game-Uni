@@ -11,8 +11,7 @@ public class AdvancableTextbox : MonoBehaviour
     [SerializeField] private GameObject m_visuals;
     [SerializeField] private Button m_advance_text_button;
 
-    private void Awake()
-    {
+    private void Awake() {
         if (instance == null)
             instance = this;
     }

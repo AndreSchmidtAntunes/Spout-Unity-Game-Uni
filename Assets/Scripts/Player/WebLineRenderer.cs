@@ -23,7 +23,7 @@ public class WebLineRenderer : MonoBehaviour
     private Vector3 _ray_end_point;
     private Vector3 _ray_direction;
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
     [SerializeField] private bool init = false;
 
     private void OnValidate() {
@@ -37,7 +37,7 @@ public class WebLineRenderer : MonoBehaviour
         }
         AnimationStep(elapsed_time);
     }
-#endif
+//#endif
 
     bool CanAnimate() {
         return _line_length > 0;

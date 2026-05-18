@@ -59,11 +59,9 @@ public class PlayerCharCon : MonoBehaviour
     }
 
     void OnValidate() {
-        AddToGameManager();
-        TryGetComponent(out m_rigidbody);
-        TryGetComponent(out m_collider);
+        if (m_rigidbody == null) TryGetComponent(out m_rigidbody);
+        if (m_collider == null) TryGetComponent(out m_collider);
     }
-
 
     private void Awake() {
         if (m_rigidbody == null) TryGetComponent(out m_rigidbody);
@@ -75,15 +73,6 @@ public class PlayerCharCon : MonoBehaviour
     private void Start() {
         startPos = transform.position;
         OnDamagedEvent.AddListener(OnDamaged);
-        GameManager.instance.onInitialised.AddListener(AddToGameManager);
-    }
-
-    private void AddToGameManager() {
-        if (GameManager.instance.player == null) {
-            if (GameManager.is_instanced) {
-                GameManager.instance.player = this;
-            }
-        }
     }
 
     private void OnDamaged(int new_health) {

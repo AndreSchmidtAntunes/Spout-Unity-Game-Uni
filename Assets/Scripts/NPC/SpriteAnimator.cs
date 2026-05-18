@@ -13,22 +13,28 @@ public class SpriteAnimator : MonoBehaviour
     Vector2 random_speed_range = Vector2.one;
 
     [SerializeField] bool random_start_frame = true;
-    private int start_frame;
+    private int start_frame = 0;
 
     private float speed_multiplier;
     private float frame_duration; // how long a frame lasts in seconds
 
-    private SpriteRenderer m_renderer;
+    [SerializeField] private SpriteRenderer m_renderer;
 
     void OnValidate() {
 
         // Set these local variables when values are changed in the inspector
         // so they do not have to be set for all users of this script on start.
-        start_frame = Random.Range(0, sprites.Length);
         speed_multiplier = Random.Range(random_speed_range.x, random_speed_range.y);
         frame_duration = 1 / (speed_multiplier * FPS);
 
-        TryGetComponent(out m_renderer);
+        if (m_renderer == null) TryGetComponent(out m_renderer);
+    }
+
+    void Awake() {
+        speed_multiplier = Random.Range(random_speed_range.x, random_speed_range.y);
+        frame_duration = 1 / (speed_multiplier * FPS);
+
+        if (m_renderer == null) TryGetComponent(out m_renderer);
     }
 
     void Play(int start_frame = 0) {

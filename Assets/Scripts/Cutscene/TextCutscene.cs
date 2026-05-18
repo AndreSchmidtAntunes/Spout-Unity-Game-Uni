@@ -19,6 +19,7 @@ public class TextCutscene : MonoBehaviour
     int trigger_enter_count = 0;
     private void OnTriggerEnter(Collider other) {
         if (m_runEvent == RunType.OnceOnTriggerEnter && trigger_enter_count == 0) {
+            Debug.Log("Entered trigger" + gameObject.name);
             StartCoroutine(CutsceneCour());
             onCutsceneStart.Invoke();
             trigger_enter_count++;
@@ -35,14 +36,16 @@ public class TextCutscene : MonoBehaviour
 
     private IEnumerator CutsceneCour() {
         m_cutsceneCamera.Priority += 100;
-        if (m_disablePlayerMovement)
+        if (m_disablePlayerMovement) {
             GameManager.instance.player.movement_enabled = false;
+        }
 
         yield return StartCoroutine(UIManager.instance.playerTextbox.DisplayTextArray(m_text));
         onCutsceneEnd.Invoke();
         if (!m_retainCameraAfterCutscene)
             m_cutsceneCamera.Priority -= 100;
-        if (m_disablePlayerMovement)
+        if (m_disablePlayerMovement) {
             GameManager.instance.player.movement_enabled = true;
+        }
     }
 }

@@ -14,9 +14,12 @@ public class RespawnZone : MonoBehaviour
     private void Awake() {
         Physics.Raycast(m_respawn_point.position, Vector3.down, out RaycastHit hit);
         respawn_point = hit.point;
-        respawn_point += new Vector2(0, GameManager.instance.player.collision_radius);
+
     }
 
+    private void Start() { // run on start after game manager has been instantiated.
+        respawn_point += new Vector2(0, GameManager.instance.player.collision_radius);
+    }
     public static RespawnZone current_respawn_zone { get; private set; } = null;
 
     private static bool ShouldSwitchRespawnZone(RespawnZone new_zone, RespawnZone old_zone)
